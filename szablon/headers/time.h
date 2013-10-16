@@ -20,6 +20,7 @@
   void start_time(Time *);
   void stop_time(Time *);
   double time_diff(TimeSpec *, TimeSpec *);
+  double get_time(Time *);
   void print_time(Time *);
   void delete_time(Time *);
 
