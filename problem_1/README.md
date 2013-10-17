@@ -1,5 +1,5 @@
 Design and implement an MPI/C program for the matrix/vector product.
-* Given are: 
+* Given are:
     a cluster consisting of p=4 networked processors,
     a square n=16,
     (16 x 16) matrix called A and a vector x.
