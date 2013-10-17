@@ -23,5 +23,6 @@
   void multiply_vector_by(Vector *, double);
   Vector *multiply_vectors(Vector *, Vector *);
   double reduce_vector(Vector *, int, int);
+  void randomize_vector(Vector *, int);
 
 #endif

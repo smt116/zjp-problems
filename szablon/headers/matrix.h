@@ -19,7 +19,6 @@
   void set_matrix_with_vars(Matrix *, double *);
   void print_matrix(Matrix *, char *);
   Matrix *product_matrix(Matrix *, Matrix *);
-
-  #define index (i*p->m)+k
+  void randomize_matrix(Matrix *, int);
 
 #endif
