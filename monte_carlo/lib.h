@@ -17,5 +17,7 @@
   #define MALLOC(type, n) (type*)malloc((n)*sizeof(type))
 
   void get_double_from_args(char *, double *, int, char **);
+  int point_in_circle(double, double, double);
+  int count_points_in_circle(Vector *);
 
 #endif
