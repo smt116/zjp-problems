@@ -1,10 +1,10 @@
 #!/bin/bash
 
 DEMENTIAL=4
-ATTS=512
-_VECTOR=32
+ATTS=64
+_VECTOR=16
 VECTOR_N=9
-THRS_N=5
+THRS_N=4
 
 rm -rf tests
 mkdir tests
@@ -33,7 +33,10 @@ do
   echo "$VECTOR;$TIME" >> sequential_out
 
   VECTOR=$(($VECTOR *2))
+  sleep 5
 done
+
+sleep 60
 
 VECTOR=$_VECTOR
 for i in $(seq 1 $VECTOR_N)
@@ -58,8 +61,10 @@ do
     echo "$THR;$VECTOR;$TIME" >> parallel_out
 
     THR=$((THR * 2))
+    sleep 10
   done
 
   VECTOR=$(($VECTOR * 2))
+  sleep 30
 done
 

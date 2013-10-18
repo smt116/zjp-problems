@@ -1,9 +1,9 @@
 #!/bin/bash
 
 DEMENTIAL=4
-ATTS=128
-_VECTOR=256
-VECTOR_N=14
+ATTS=64
+_VECTOR=$((1024 * 2 * 2 * 2))
+VECTOR_N=16
 THRS_N=4
 
 rm -rf tests
@@ -35,7 +35,10 @@ do
   echo "$VECTOR;$TIME;$PI" >> sequential_out
 
   VECTOR=$(($VECTOR *2))
+  sleep 5
 done
+
+sleep 60
 
 VECTOR=$_VECTOR
 for i in $(seq 1 $VECTOR_N)
@@ -61,8 +64,10 @@ do
     echo "$THR;$VECTOR;$TIME;$PI" >> parallel_out
 
     THR=$((THR * 2))
+    sleep 10
   done
 
   VECTOR=$(($VECTOR * 2))
+  sleep 30
 done
 
