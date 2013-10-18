@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DEMENTIAL=4
-ATTS=128
+ATTS=512
 _VECTOR=32
 VECTOR_N=9
 THRS_N=5
@@ -15,6 +15,25 @@ cd tests
 
 echo "THREADS;VECTOR SIZE;TIME" > parallel_out
 echo "VECTOR SIZE;TIME" > sequential_out
+
+VECTOR=$_VECTOR
+for i in $(seq 1 $VECTOR_N)
+do
+  TIME=0
+  for attempt in $(seq 1 $ATTS)
+  do
+    echo "$VECTOR;$attempt" >> attempt
+    tmp=`./seq_app --size $VECTOR`
+    echo $tmp >> attempt
+    TIME=$(echo "$TIME+$tmp" | bc -l)
+  done
+
+  TIME=$(echo "$TIME/$ATTS.0" | bc -l)
+  echo "$VECTOR;$TIME"
+  echo "$VECTOR;$TIME" >> sequential_out
+
+  VECTOR=$(($VECTOR *2))
+done
 
 VECTOR=$_VECTOR
 for i in $(seq 1 $VECTOR_N)
@@ -44,21 +63,3 @@ do
   VECTOR=$(($VECTOR * 2))
 done
 
-VECTOR=$_VECTOR
-for i in $(seq 1 $VECTOR_N)
-do
-  TIME=0
-  for attempt in $(seq 1 $ATTS)
-  do
-    echo "$VECTOR;$attempt" >> attempt
-    tmp=`./seq_app --size $VECTOR`
-    echo $tmp >> attempt
-    TIME=$(echo "$TIME+$tmp" | bc -l)
-  done
-
-  TIME=$(echo "$TIME/$ATTS.0" | bc -l)
-  echo "$VECTOR;$TIME"
-  echo "$VECTOR;$TIME" >> sequential_out
-
-  VECTOR=$(($VECTOR *2))
-done
