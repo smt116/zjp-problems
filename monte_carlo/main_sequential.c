@@ -6,16 +6,12 @@
 
 int main(int argc, char *argv[]) {
 
-  unsigned int total_pairs = 64,
-               verbose = 0,
-               show_time = 0;
+  unsigned long long int total_pairs = 64;
+  int verbose = 0,
+      show_time = 0;
   double tmp_from_args = 0;
 
-  get_double_from_args("--pairs", &tmp_from_args, argc, argv);
-  if(tmp_from_args != 0) {
-    total_pairs = (int) tmp_from_args;
-    tmp_from_args = 0;
-  }
+  get_long_from_args("--pairs", &total_pairs, argc, argv);
   get_double_from_args("--verbose", &tmp_from_args, argc, argv);
   if(tmp_from_args != 0) {
     verbose = (int) tmp_from_args;
@@ -28,7 +24,7 @@ int main(int argc, char *argv[]) {
   }
 
   if(verbose) {
-    printf("Total pairs: %u\n", total_pairs);
+    printf("Total pairs: %llu\n", total_pairs);
   }
 
   {
@@ -42,7 +38,7 @@ int main(int argc, char *argv[]) {
     Time *t = new_time();
     start_time(t);
 
-    double PI = 4 * (count_points_in_circle(pairs) / (double) total_pairs);
+    double PI = 4 * ((double) count_points_in_circle(pairs) / total_pairs);
 
     stop_time(t);
 

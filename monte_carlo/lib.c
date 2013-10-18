@@ -15,6 +15,17 @@ void get_double_from_args(char *option, double *value, int argc, char **argv) {
   }
 }
 
+void get_long_from_args(char *option, unsigned long long int *value, int argc, char **argv) {
+  int i = 0;
+
+  while(i < argc) {
+    if(!strcmp(argv[i], option)) {
+      *value = atoll(argv[++i]);
+    }
+    i++;
+  }
+}
+
 int point_in_circle(double x, double y, double z) {
   if((x * x) + (y * y) <= z) {
     return 1;
@@ -23,8 +34,8 @@ int point_in_circle(double x, double y, double z) {
   }
 }
 
-int count_points_in_circle(Vector *p) {
-  int i,
+unsigned long long int count_points_in_circle(Vector *p) {
+  unsigned long long int i,
       success = 0;
 
   for(i=0; i < p->size; i+=2) {

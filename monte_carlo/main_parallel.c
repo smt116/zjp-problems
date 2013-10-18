@@ -7,18 +7,14 @@
 
 int main(int argc, char *argv[]) {
 
-  int total_pairs = 64,
-      verbose = 0,
+  unsigned long long int total_pairs = 64;
+  int verbose = 0,
       show_time = 0,
       size,
       rank;
   double tmp_from_args = 0;
 
-  get_double_from_args("--pairs", &tmp_from_args, argc, argv);
-  if(tmp_from_args != 0) {
-    total_pairs = (int) tmp_from_args;
-    tmp_from_args = 0;
-  }
+  get_long_from_args("--pairs", &total_pairs, argc, argv);
   get_double_from_args("--verbose", &tmp_from_args, argc, argv);
   if(tmp_from_args != 0) {
     verbose = (int) tmp_from_args;
@@ -30,8 +26,8 @@ int main(int argc, char *argv[]) {
     tmp_from_args = 0;
   }
 
-  if(verbose) {
-    printf("Total pairs: %u\n", total_pairs);
+  if(verbose && rank == 0) {
+    printf("Total pairs: %llu\n", total_pairs);
   }
 
   MPI_Init(&argc, &argv);
@@ -48,7 +44,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  int local_size = (total_pairs * 2) / size,
+  unsigned long long int local_size = (total_pairs * 2) / size,
       local_points_in_circle = 0,
       points_in_circle = 0;
   Vector *local_pairs = new_vector(local_size);
@@ -68,7 +64,7 @@ int main(int argc, char *argv[]) {
 
   MPI_Reduce(&local_points_in_circle,
              &points_in_circle,
-             1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+             1, MPI_UNSIGNED_LONG_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
 
   if(rank == 0) {
     double PI = 4 * (points_in_circle / (double) total_pairs);
