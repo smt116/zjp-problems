@@ -8,11 +8,10 @@ FLAGS = -Wall -ggdb
 OUTPUT = app
 # Nazwa plikow obiektowych
 SEQ_OBJS = main_sequential.o lib.o sequential.o smt_lib.a
-PAR_OBJS = main_parallel.o lib.o parallel.o smt_lib.a
+PAR_OBJS = main_parallel.o lib.o smt_lib.a
 # Nazwa plikow naglowkowych
 LIBS = lib.h ${ls headers/*.h}
 SEQ_LIBS = sequential.h
-PAR_LIBS = parallel.h
 
 # Domyslna regola
 default: compile_sequential compile_parallel clean
@@ -25,7 +24,7 @@ par: compile_parallel clean
 compile_sequential: $(SEQ_OBJS) $(LIBS) $(SEQ_LIBS)
 	$(CC) $(FLAGS) $(SEQ_OBJS) -o seq_$(OUTPUT) -lrt
 
-compile_parallel: $(PAR_OBJS) $(LIBS) $(PAR_LIBS)
+compile_parallel: $(PAR_OBJS) $(LIBS)
 	$(CC) $(FLAGS) $(PAR_OBJS) -o par_$(OUTPUT) -lrt
 
 # Regula (pattern)

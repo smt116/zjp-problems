@@ -6,7 +6,7 @@
 #include "sequential.h"
 
 void sequential_matrix_product(Matrix *product, Matrix *A, Matrix *x) {
-  int i, k, l;
+  unsigned long long int i, k, l;
 
   for(i=0; i < A->n; i++) {
     for(k=0; k < A->m; k++) {

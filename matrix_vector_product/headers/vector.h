@@ -6,11 +6,11 @@
 #define SMT__LOCAL_VECTOR_LIB
 
   typedef struct Vector {
-    int size;
+    unsigned long long int size;
     double *data;
   } Vector;
 
-  Vector *new_vector(int);
+  Vector *new_vector(unsigned long long int);
 
   /*
    * Be sure that p->size >= q->size!
@@ -22,7 +22,8 @@
   void delete_vector(Vector *);
   void multiply_vector_by(Vector *, double);
   Vector *multiply_vectors(Vector *, Vector *);
-  double reduce_vector(Vector *, int, int);
-  void randomize_vector(Vector *, int);
+  double reduce_vector(Vector *, unsigned long long int, unsigned long long int);
+  void randomize_vector(Vector *, unsigned long long int);
+  Vector *vector_cut(Vector *, unsigned long long int, unsigned long long int);
 
 #endif

@@ -8,17 +8,17 @@
   #include "vector.h"
 
   typedef struct Matrix {
-    int n;
-    int m;
+    unsigned long long int n;
+    unsigned long long int m;
     double *data;
   } Matrix;
 
-  Matrix *new_matrix(int, int);
+  Matrix *new_matrix(unsigned long long int, unsigned long long int);
   void delete_matrix(Matrix *);
   void set_matrix_with_var(Matrix *, double);
   void set_matrix_with_vars(Matrix *, double *);
   void print_matrix(Matrix *, char *);
   Matrix *product_matrix(Matrix *, Matrix *);
-  void randomize_matrix(Matrix *, int);
+  void randomize_matrix(Matrix *, unsigned long long int);
 
 #endif

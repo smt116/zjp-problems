@@ -7,37 +7,43 @@
 
 int main(int argc, char *argv[]) {
 
-  unsigned int demential_size = 16,
-      verbose = 0;
-
+  unsigned long long int demential_A = 16,
+                         demential_x = 1,
+                         demential = 0;
+  int verbose = 0;
   double tmp_from_args = 0,
          max_data_value = 1024;
 
-  get_double_from_args("--size", &tmp_from_args, argc, argv);
-  if(tmp_from_args != 0) {
-    demential_size = (int) tmp_from_args;
-    tmp_from_args = 0;
+  {
+    get_long_from_args("-a", &demential_A, argc, argv);
+    get_long_from_args("-x", &demential_x, argc, argv);
+    get_long_from_args("--size", &demential, argc, argv);
+    if(demential) {
+      demential_A = demential_x = demential;
+    }
+    get_double_from_args("--verbose", &tmp_from_args, argc, argv);
+    if(tmp_from_args != 0) {
+      verbose = (int) tmp_from_args;
+      tmp_from_args = 0;
+    }
+    get_double_from_args("--maxvalue", &max_data_value, argc, argv);
   }
-  get_double_from_args("--verbose", &tmp_from_args, argc, argv);
-  if(tmp_from_args != 0) {
-    verbose = (int) tmp_from_args;
-    tmp_from_args = 0;
-  }
-  get_double_from_args("--maxvalue", &max_data_value, argc, argv);
 
-  Matrix *A = new_matrix(demential_size, demential_size);
-  Matrix *x = new_matrix(demential_size, 1);
+  Matrix *A = new_matrix(demential_A, demential_A);
+  Matrix *x = new_matrix(demential_A, demential_x);
 
-  randomize_matrix(A, max_data_value);
-  randomize_matrix(x, max_data_value);
+  {
+    randomize_matrix(A, max_data_value);
+    randomize_matrix(x, max_data_value);
 
-  if(verbose) {
-    print_matrix(A, "A");
-    print_matrix(x, "x");
+    if(verbose) {
+      print_matrix(A, "A");
+      print_matrix(x, "x");
+    }
   }
 
   {
-    Matrix *product = new_matrix(A->m, 1);
+    Matrix *product = new_matrix(A->m, x->m);
     set_matrix_with_var(product, 0);
 
     Time *t = new_time();
@@ -53,6 +59,7 @@ int main(int argc, char *argv[]) {
     if(verbose) {
       print_matrix(product, "Ax");
     }
+
     delete_matrix(product);
   }
   delete_matrix(A);
