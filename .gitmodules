@@ -1,0 +1,3 @@
+[submodule "c-libs"]
+	path = c-libs
+	url = git://github.com/smt116/c-libs.git
