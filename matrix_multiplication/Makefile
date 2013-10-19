@@ -14,11 +14,14 @@ LIBS = lib.h ${ls headers/*.h}
 SEQ_LIBS = sequential.h
 
 # Domyslna regola
-default: compile_sequential compile_parallel clean
+default: copy_lib compile_sequential compile_parallel clean
 
-seq: compile_sequential clean
+seq: copy_lib compile_sequential clean
 
-par: compile_parallel clean
+par: copy_lib compile_parallel clean
+
+copy_lib:
+	cp ../c-libs/smt_lib.a .
 
 # Kompilacja
 compile_sequential: $(SEQ_OBJS) $(LIBS) $(SEQ_LIBS)
@@ -32,7 +35,7 @@ compile_parallel: $(PAR_OBJS) $(LIBS)
 	$(CC) $(FLAGS) -c $<
 
 clean:
-	rm -f *~ *.o .*.swp
+	rm -f *~ *.o .*.swp *.a
 
 veryclean: clean
 	rm -f *.in *.out seq_$(OUTPUT) par_$(OUTPUT)

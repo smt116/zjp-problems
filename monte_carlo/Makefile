@@ -14,21 +14,24 @@ OBJS = lib.o smt_lib.a
 LIBS = lib.h ${ls headers/*.h}
 
 # Domyslna regola
-default: compile_seq compile_par clean
+default: copy_lib compile_seq compile_par clean
 
 # Kompilacja
-compile_seq: $(OBJS) $(SEQ_OBJS) $(LIBS)
+compile_seq: copy_lib $(OBJS) $(SEQ_OBJS) $(LIBS)
 	$(CC) $(FLAGS) $(SEQ_OBJS) $(OBJS) -o seq_$(OUTPUT) -lrt
 
-compile_par: $(OBJS) $(PAR_OBJS) $(LIBS)
+compile_par: copy_lib $(OBJS) $(PAR_OBJS) $(LIBS)
 	$(CC) $(FLAGS) $(PAR_OBJS) $(OBJS) -o par_$(OUTPUT) -lrt
+
+copy_lib:
+	cp ../c-libs/smt_lib.a .
 
 # Regula (pattern)
 %.o: %.c $(LIBS)
 	$(CC) $(FLAGS) -c $<
 
 clean:
-	rm -f *~ *.o .*.swp
+	rm -f *~ *.o .*.swp *.a
 
 veryclean: clean
 	rm -f *.in *.out seq_$(OUTPUT) par_$(OUTPUT)

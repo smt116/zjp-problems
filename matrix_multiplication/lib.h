@@ -10,9 +10,9 @@
   #include <math.h>
   #include <string.h>
 
-  #include "headers/vector.h"
-  #include "headers/matrix.h"
-  #include "headers/time.h"
+  #include "../c-libs/headers/vector.h"
+  #include "../c-libs/headers/matrix.h"
+  #include "../c-libs/headers/time.h"
 
   #define MALLOC(type, n) (type*)malloc((n)*sizeof(type))
 
