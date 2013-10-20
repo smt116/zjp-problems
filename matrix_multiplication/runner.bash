@@ -2,8 +2,8 @@
 
 DEMENTIAL=4
 ATTS=64
-_VECTOR=16
-VECTOR_N=9
+_DEMENTIAL=16
+DEMENTIAL_N=7
 THRS_N=4
 
 rm -rf tests
@@ -13,35 +13,34 @@ cp par_app tests/.
 cp seq_app tests/.
 cd tests
 
-echo "THREADS;VECTOR SIZE;TIME" > parallel_out
-echo "VECTOR SIZE;TIME" > sequential_out
+echo "THREADS;DEMENTIAL SIZE;TIME" > parallel_out
+echo "DEMENTIAL SIZE;TIME" > sequential_out
 
-VECTOR=$_VECTOR
-for i in $(seq 1 $VECTOR_N)
+DEMENTIAL=$_DEMENTIAL
+for i in $(seq 1 $DEMENTIAL_N)
 do
   TIME=0
   for attempt in $(seq 1 $ATTS)
   do
-    echo "$VECTOR;$attempt" >> attempt
-    tmp=`./seq_app --size $VECTOR`
+    echo "$DEMENTIAL;$attempt" >> attempt
+    tmp=`./seq_app --size $DEMENTIAL`
     echo $tmp >> attempt
     TIME=$(echo "$TIME+$tmp" | bc -l)
   done
 
   TIME=$(echo "$TIME/$ATTS.0" | bc -l)
-  echo "$VECTOR;$TIME"
-  echo "$VECTOR;$TIME" >> sequential_out
+  echo "$DEMENTIAL;$TIME"
+  echo "$DEMENTIAL;$TIME" >> sequential_out
 
-  VECTOR=$(($VECTOR *2))
-  sleep 5
+  DEMENTIAL=$(($DEMENTIAL * 2))
 done
 
-sleep 60
+sleep 30
 
-VECTOR=$_VECTOR
-for i in $(seq 1 $VECTOR_N)
+DEMENTIAL=$_DEMENTIAL
+for i in $(seq 1 $DEMENTIAL_N)
 do
-  echo "VECTOR: $VECTOR"
+  echo "DEMENTIAL: $DEMENTIAL"
   THR=2
   for k in $(seq 1 $THRS_N)
   do
@@ -50,21 +49,21 @@ do
 
     for attempt in $(seq 1 $ATTS)
     do
-      echo "$THR;$VECTOR;$attempt" >> attempt
-      tmp=`mpirun -np $THR ./par_app --size $VECTOR`
+      echo "$THR;$DEMENTIAL;$attempt" >> attempt
+      tmp=`mpirun -np $THR ./par_app --size $DEMENTIAL`
       echo $tmp >> attempt
       TIME=$(echo "$TIME+$tmp" | bc -l)
     done
 
     TIME=$(echo "$TIME/$ATTS.0" | bc -l)
-    echo "$THR;$VECTOR;$TIME"
-    echo "$THR;$VECTOR;$TIME" >> parallel_out
+    echo "$THR;$DEMENTIAL;$TIME"
+    echo "$THR;$DEMENTIAL;$TIME" >> parallel_out
 
     THR=$((THR * 2))
-    sleep 10
+    sleep 3
   done
 
-  VECTOR=$(($VECTOR * 2))
-  sleep 30
+  DEMENTIAL=$(($DEMENTIAL * 2))
+  sleep 10
 done
 
