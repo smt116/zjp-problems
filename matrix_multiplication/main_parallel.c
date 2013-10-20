@@ -7,9 +7,9 @@
 
 int main(int argc, char *argv[]) {
 
-  unsigned long long int demential_A = 16,
-                         demential_x = 1,
-                         demential = 0;
+  unsigned long long int dimension_A = 16,
+                         dimension_x = 1,
+                         dimension = 0;
 
   int size,
       rank,
@@ -19,11 +19,11 @@ int main(int argc, char *argv[]) {
          max_data_value = 1024;
 
   {
-    get_long_from_args("-a", &demential_A, argc, argv);
-    get_long_from_args("-x", &demential_x, argc, argv);
-    get_long_from_args("--size", &demential, argc, argv);
-    if(demential) {
-      demential_A = demential_x = demential;
+    get_long_from_args("-a", &dimension_A, argc, argv);
+    get_long_from_args("-x", &dimension_x, argc, argv);
+    get_long_from_args("--size", &dimension, argc, argv);
+    if(dimension) {
+      dimension_A = dimension_x = dimension;
     }
     get_double_from_args("--verbose", &tmp_from_args, argc, argv);
     if(tmp_from_args != 0) {
@@ -37,8 +37,8 @@ int main(int argc, char *argv[]) {
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  Matrix *A       = new_matrix(demential_A, demential_A),
-         *x       = new_matrix(demential_A, demential_x),
+  Matrix *A       = new_matrix(dimension_A, dimension_A),
+         *x       = new_matrix(dimension_A, dimension_x),
          *product = new_matrix(A->m, x->m);
   Time *t = new_time();
 
@@ -60,11 +60,11 @@ int main(int argc, char *argv[]) {
   }
 
   start_time(t);
-  unsigned long long int local_size = demential_A * (demential_A / size);
+  unsigned long long int local_size = dimension_A * (dimension_A / size);
 
   Vector *local_row = new_vector(local_size),
-         *local_column = new_vector(demential_x * demential_A);
-  Matrix *local_sum = new_matrix((demential_A / size), demential_x);
+         *local_column = new_vector(dimension_x * dimension_A);
+  Matrix *local_sum = new_matrix((dimension_A / size), dimension_x);
   set_matrix_with_var(local_sum, 0);
 
   MPI_Scatter(
@@ -88,10 +88,10 @@ int main(int argc, char *argv[]) {
       print_vector(local_row, "rows_from_A   ");
     }
 
-    for(i=0; i < demential_x; i++) {
-      for(k=0; k < demential_A / size; k++) {
-        Vector *c = vector_cut(local_column, (i * demential_A), ((i + 1) * demential_A)),
-               *r = vector_cut(local_row, (k * demential_A), ((k + 1) * demential_A));
+    for(i=0; i < dimension_x; i++) {
+      for(k=0; k < dimension_A / size; k++) {
+        Vector *c = vector_cut(local_column, (i * dimension_A), ((i + 1) * dimension_A)),
+               *r = vector_cut(local_row, (k * dimension_A), ((k + 1) * dimension_A));
 
         Vector *m = multiply_vectors(r, c);
         double sum = reduce_vector(m, 0, m->size);
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
     }
 
     {
-      int data_size = (demential_A / size) * demential_x;
+      int data_size = (dimension_A / size) * dimension_x;
       MPI_Gather(local_sum->data, data_size, MPI_DOUBLE,
                  product->data,   data_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     }

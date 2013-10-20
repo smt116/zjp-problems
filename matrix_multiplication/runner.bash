@@ -1,9 +1,9 @@
 #!/bin/bash
 
-DEMENTIAL=4
+DIMENSION=4
 ATTS=64
-_DEMENTIAL=16
-DEMENTIAL_N=7
+_DIMENSION=16
+DIMENSION_N=7
 THRS_N=4
 
 rm -rf tests
@@ -13,34 +13,34 @@ cp par_app tests/.
 cp seq_app tests/.
 cd tests
 
-echo "THREADS;DEMENTIAL SIZE;TIME" > parallel_out
-echo "DEMENTIAL SIZE;TIME" > sequential_out
+echo "THREADS;DIMENSION SIZE;TIME" > parallel_out
+echo "DIMENSION SIZE;TIME" > sequential_out
 
-DEMENTIAL=$_DEMENTIAL
-for i in $(seq 1 $DEMENTIAL_N)
+DIMENSION=$_DIMENSION
+for i in $(seq 1 $DIMENSION_N)
 do
   TIME=0
   for attempt in $(seq 1 $ATTS)
   do
-    echo "$DEMENTIAL;$attempt" >> attempt
-    tmp=`./seq_app --size $DEMENTIAL`
+    echo "$DIMENSION;$attempt" >> attempt
+    tmp=`./seq_app --size $DIMENSION`
     echo $tmp >> attempt
     TIME=$(echo "$TIME+$tmp" | bc -l)
   done
 
   TIME=$(echo "$TIME/$ATTS.0" | bc -l)
-  echo "$DEMENTIAL;$TIME"
-  echo "$DEMENTIAL;$TIME" >> sequential_out
+  echo "$DIMENSION;$TIME"
+  echo "$DIMENSION;$TIME" >> sequential_out
 
-  DEMENTIAL=$(($DEMENTIAL * 2))
+  DIMENSION=$(($DIMENSION * 2))
 done
 
 sleep 30
 
-DEMENTIAL=$_DEMENTIAL
-for i in $(seq 1 $DEMENTIAL_N)
+DIMENSION=$_DIMENSION
+for i in $(seq 1 $DIMENSION_N)
 do
-  echo "DEMENTIAL: $DEMENTIAL"
+  echo "DIMENSION: $DIMENSION"
   THR=2
   for k in $(seq 1 $THRS_N)
   do
@@ -49,21 +49,21 @@ do
 
     for attempt in $(seq 1 $ATTS)
     do
-      echo "$THR;$DEMENTIAL;$attempt" >> attempt
-      tmp=`mpirun -np $THR ./par_app --size $DEMENTIAL`
+      echo "$THR;$DIMENSION;$attempt" >> attempt
+      tmp=`mpirun -np $THR ./par_app --size $DIMENSION`
       echo $tmp >> attempt
       TIME=$(echo "$TIME+$tmp" | bc -l)
     done
 
     TIME=$(echo "$TIME/$ATTS.0" | bc -l)
-    echo "$THR;$DEMENTIAL;$TIME"
-    echo "$THR;$DEMENTIAL;$TIME" >> parallel_out
+    echo "$THR;$DIMENSION;$TIME"
+    echo "$THR;$DIMENSION;$TIME" >> parallel_out
 
     THR=$((THR * 2))
     sleep 3
   done
 
-  DEMENTIAL=$(($DEMENTIAL * 2))
+  DIMENSION=$(($DIMENSION * 2))
   sleep 10
 done
 

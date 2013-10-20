@@ -7,19 +7,19 @@
 
 int main(int argc, char *argv[]) {
 
-  unsigned long long int demential_A = 16,
-                         demential_x = 1,
-                         demential = 0;
+  unsigned long long int dimension_A = 16,
+                         dimension_x = 1,
+                         dimension = 0;
   int verbose = 0;
   double tmp_from_args = 0,
          max_data_value = 1024;
 
   {
-    get_long_from_args("-a", &demential_A, argc, argv);
-    get_long_from_args("-x", &demential_x, argc, argv);
-    get_long_from_args("--size", &demential, argc, argv);
-    if(demential) {
-      demential_A = demential_x = demential;
+    get_long_from_args("-a", &dimension_A, argc, argv);
+    get_long_from_args("-x", &dimension_x, argc, argv);
+    get_long_from_args("--size", &dimension, argc, argv);
+    if(dimension) {
+      dimension_A = dimension_x = dimension;
     }
     get_double_from_args("--verbose", &tmp_from_args, argc, argv);
     if(tmp_from_args != 0) {
@@ -29,8 +29,8 @@ int main(int argc, char *argv[]) {
     get_double_from_args("--maxvalue", &max_data_value, argc, argv);
   }
 
-  Matrix *A = new_matrix(demential_A, demential_A);
-  Matrix *x = new_matrix(demential_A, demential_x);
+  Matrix *A = new_matrix(dimension_A, dimension_A);
+  Matrix *x = new_matrix(dimension_A, dimension_x);
 
   {
     randomize_matrix(A, max_data_value);
