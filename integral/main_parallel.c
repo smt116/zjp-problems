@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]) {
 
-  long long int n = 8;
+  long long int n = 32;
   double a = -2.0,
          b = 2.0;
   int verbose = 0,
@@ -45,11 +45,12 @@ int main(int argc, char *argv[]) {
            local_b = a + ((double) (rank + 1) / (double) size) * (b - a),
            local_integral = 0,
            global_integral = 0;
+    long long int local_n = n / size;
 
     Time *t = new_time();
     start_time(t);
 
-    local_integral = integral(local_a, local_b, n);
+    local_integral = integral(local_a, local_b, local_n);
 
     if(verbose) {
       printf("[%i] Hi chef! my part for [%lf, %lf] is: %.16lf, right?\n", rank, local_a, local_b, local_integral);
